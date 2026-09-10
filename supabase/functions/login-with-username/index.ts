@@ -33,8 +33,8 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "invalid credentials" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
-    if (!(await verifyTurnstile(captchaToken, ip, req.headers.get("origin") || req.headers.get("referer")))) {
-      return new Response(JSON.stringify({ error: "captcha failed" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (!(await verifyTurnstile(captchaToken, ip))) {
+      return new Response(JSON.stringify({ error: "Please complete the security verification and try again." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const url = Deno.env.get("SUPABASE_URL")!;
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
