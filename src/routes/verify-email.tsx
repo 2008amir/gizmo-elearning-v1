@@ -29,6 +29,8 @@ function VerifyEmailPage() {
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<TurnstileHandle | null>(null);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -63,12 +65,22 @@ function VerifyEmailPage() {
 
   const resend = async () => {
     if (!email) { toast.error("Missing email. Please sign up again."); return; }
+    if (!captchaToken) { toast.error("Please complete the verification check below."); return; }
     setResending(true);
     try {
-      // Re-triggering the request requires the password, which we don't have here.
-      // Ask the user to sign up again to receive a fresh code.
-      toast.info("To get a new code, please return to sign up and submit again.");
+      const { data, error } = await supabase.functions.invoke("signup-request-otp", {
+        body: { email, resend: true, captchaToken },
+      });
+      if (error || !data || data.error) {
+        toast.error((data && data.error) || error?.message || "Could not send a new code");
+        return;
+      }
+      setCode("");
+      toast.success("We sent a new code to your email.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send a new code");
     } finally {
+      captchaRef.current?.reset();
       setResending(false);
     }
   };
