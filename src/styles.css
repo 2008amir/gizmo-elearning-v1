@@ -1,0 +1,417 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-neon-magenta: var(--neon-magenta);
+  --color-neon-cyan: var(--neon-cyan);
+  --color-neon-violet: var(--neon-violet);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Corporate dark: deep navy base, cream text, blue primary, yellow accent */
+  --background: oklch(0.14 0.04 250);
+  --foreground: oklch(0.97 0.01 90);
+
+  --card: oklch(0.19 0.05 250);
+  --card-foreground: oklch(0.97 0.01 90);
+
+  --popover: oklch(0.19 0.05 250);
+  --popover-foreground: oklch(0.97 0.01 90);
+
+  /* Corporate blue primary */
+  --primary: oklch(0.55 0.14 250);
+  --primary-foreground: oklch(0.98 0.01 90);
+
+  --secondary: oklch(0.24 0.06 250);
+  --secondary-foreground: oklch(0.97 0.01 90);
+
+  --muted: oklch(0.27 0.05 250);
+  --muted-foreground: oklch(0.68 0.04 250);
+
+  /* Warm yellow accent */
+  --accent: oklch(0.80 0.12 85);
+  --accent-foreground: oklch(0.14 0.04 250);
+
+  --destructive: oklch(0.55 0.20 25);
+  --destructive-foreground: oklch(0.99 0.01 90);
+
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.55 0.14 250);
+
+  --neon-magenta: oklch(0.55 0.14 250);
+  --neon-cyan: oklch(0.80 0.12 85);
+  --neon-violet: oklch(0.35 0.10 250);
+
+  --chart-1: oklch(0.55 0.14 250);
+  --chart-2: oklch(0.80 0.12 85);
+  --chart-3: oklch(0.97 0.01 90);
+  --chart-4: oklch(0.65 0.10 250);
+  --chart-5: oklch(0.45 0.08 250);
+
+  --sidebar: oklch(0.12 0.04 250);
+  --sidebar-foreground: oklch(0.97 0.01 90);
+  --sidebar-primary: oklch(0.55 0.14 250);
+  --sidebar-primary-foreground: oklch(0.98 0.01 90);
+  --sidebar-accent: oklch(0.24 0.06 250);
+  --sidebar-accent-foreground: oklch(0.97 0.01 90);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.55 0.14 250);
+
+  --gradient-primary: linear-gradient(135deg, oklch(0.55 0.14 250), oklch(0.65 0.12 250));
+  --gradient-violet: linear-gradient(135deg, oklch(0.35 0.10 250), oklch(0.55 0.14 250));
+  --shadow-glow: 0 0 40px -10px oklch(0.55 0.14 250 / 0.50);
+}
+
+.dark {
+  --background: oklch(0.14 0.04 250);
+  --foreground: oklch(0.97 0.01 90);
+}
+
+/* Light theme overrides — activated when the user selects Light or the system prefers light */
+.theme-light {
+  /* Light theme: near-white cream background + subtle cream surfaces */
+  --background: oklch(1 0.003 90);
+  --foreground: oklch(0.22 0.03 250);
+
+  --card: oklch(1 0.005 90);
+  --card-foreground: oklch(0.22 0.03 250);
+
+  --popover: oklch(1 0.005 90);
+  --popover-foreground: oklch(0.22 0.03 250);
+
+  --primary: oklch(0.55 0.16 245);
+  --primary-foreground: oklch(0.99 0.01 90);
+
+  --secondary: oklch(0.97 0.015 90);
+  --secondary-foreground: oklch(0.22 0.03 250);
+
+  --muted: oklch(0.96 0.012 90);
+  --muted-foreground: oklch(0.44 0.03 250);
+
+  --accent: oklch(0.97 0.02 90);
+  --accent-foreground: oklch(0.22 0.03 250);
+
+  --destructive: oklch(0.58 0.22 25);
+  --destructive-foreground: oklch(0.99 0.01 90);
+
+  --border: oklch(0.22 0.03 250 / 12%);
+  --input: oklch(0.22 0.03 250 / 9%);
+  --ring: oklch(0.55 0.16 245);
+
+  --neon-magenta: oklch(0.55 0.16 245);
+  --neon-cyan: oklch(0.72 0.14 85);
+  --neon-violet: oklch(0.65 0.12 245);
+
+  --gradient-primary: linear-gradient(135deg, oklch(0.55 0.16 245), oklch(0.65 0.14 245));
+  --gradient-violet: linear-gradient(135deg, oklch(0.45 0.14 245), oklch(0.55 0.16 245));
+  --shadow-glow: 0 0 40px -10px oklch(0.55 0.16 245 / 0.35);
+
+  --sidebar: oklch(0.99 0.012 90);
+  --sidebar-foreground: oklch(0.22 0.03 250);
+  --sidebar-primary: oklch(0.55 0.16 245);
+  --sidebar-primary-foreground: oklch(0.99 0.01 90);
+  --sidebar-accent: oklch(0.97 0.015 90);
+  --sidebar-accent-foreground: oklch(0.22 0.03 250);
+  --sidebar-border: oklch(0.22 0.03 250 / 10%);
+  --sidebar-ring: oklch(0.55 0.16 245);
+}
+
+/* Light theme body wash + glass overrides */
+.theme-light body {
+  background-image:
+    radial-gradient(circle at 15% 10%, oklch(0.99 0.008 90 / 0.55), transparent 45%),
+    radial-gradient(circle at 85% 80%, oklch(0.99 0.006 90 / 0.55), transparent 50%),
+    radial-gradient(circle at 50% 50%, oklch(1 0.004 90 / 0.35), transparent 60%);
+}
+.theme-light .glass {
+  background: oklch(1 0 0 / 0.65);
+  border-color: oklch(0.22 0.03 250 / 0.10);
+}
+.theme-light .glass-strong {
+  background: oklch(1 0 0 / 0.82);
+  border-color: oklch(0.22 0.03 250 / 0.12);
+}
+
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 10%, oklch(0.55 0.14 250 / 0.22), transparent 40%),
+      radial-gradient(circle at 85% 80%, oklch(0.80 0.12 85 / 0.15), transparent 45%),
+      radial-gradient(circle at 50% 50%, oklch(0.55 0.14 250 / 0.06), transparent 60%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: oklch(1 0 0 / 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid oklch(1 0 0 / 0.1);
+  }
+  .glass-strong {
+    background: oklch(0.18 0.05 270 / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid oklch(1 0 0 / 0.12);
+  }
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .gradient-bg {
+    background: var(--gradient-primary);
+  }
+  .gradient-border {
+    position: relative;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+  }
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+}
+
+/* ---------- Editor surface (white, like Word) ---------- */
+.rich-editor-light {
+  background: transparent;
+  color: #111827;
+}
+.rich-editor-light h1,
+.rich-editor-light h2,
+.rich-editor-light h3,
+.rich-editor-light h4,
+.rich-editor-light h5,
+.rich-editor-light h6,
+.rich-editor-light strong,
+.rich-editor-light blockquote {
+  color: #111827;
+}
+.rich-editor-light a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.rich-editor-light .link-url-below {
+  display: inline-block;
+  font-size: 0.8em;
+  color: #6b7280;
+  word-break: break-all;
+}
+.rich-editor-light ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.rich-editor-light ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+.rich-editor-light h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0.6em 0 0.4em;
+}
+.rich-editor-light h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin: 0.6em 0 0.4em;
+}
+.rich-editor-light h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 0.6em 0 0.4em;
+}
+.rich-editor-stage .tiptap {
+  background: transparent;
+  color: #111827;
+}
+.rich-editor-stage-fullscreen,
+.rich-html-source {
+  background: transparent;
+  color: #111827;
+}
+.rich-editor-shell-fullscreen {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 100%;
+  background: transparent;
+}
+.rich-editor-shell-fullscreen .tiptap {
+  flex: 1 1 auto;
+  min-height: 100%;
+  width: 100%;
+}
+
+/* ---------- Rich content (editor + published article) responsive media ---------- */
+/* Fallback defaults for images without inline styles */
+.rich-editor-content img:not([style]),
+.prose img:not([style]),
+.rich-image:not([style]) {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  display: block;
+}
+/* When inline style sets width/height/margin/position, preserve them exactly */
+.rich-editor-content img[style],
+.rich-editor-content video[style] {
+  max-width: none !important;
+  max-height: none !important;
+}
+/* Ensure parent containers of absolutely positioned media are relative */
+.rich-editor-content p:has(> img[style*="position"]),
+.rich-editor-content div:has(> img[style*="position"]),
+.rich-editor-content p:has(> video[style*="position"]),
+.rich-editor-content div:has(> video[style*="position"]) {
+  position: relative;
+  min-height: 200px;
+}
+/* Preserve wrapper div styling from the editor */
+.rich-editor-content [data-rich-wrapper] {
+  width: 100%;
+  overflow: hidden;
+}
+/* Allow alignment via TextAlign extension on images (wraps in <div style=text-align>) */
+.rich-editor-content [style*="text-align: left"] img,
+.prose [style*="text-align: left"] img {
+  margin-left: 0;
+  margin-right: auto;
+}
+.rich-editor-content [style*="text-align: right"] img,
+.prose [style*="text-align: right"] img {
+  margin-left: auto;
+  margin-right: 0;
+}
+.rich-editor-content [style*="text-align: center"] img,
+.prose [style*="text-align: center"] img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Published view: don't add resize handles */
+.rich-editor-content img {
+  resize: none;
+}
+
+/* Video embeds — responsive 16:9 */
+.video-embed,
+.video-embed-youtube,
+[data-youtube-video] {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #000;
+}
+.video-embed {
+  aspect-ratio: 16 / 9;
+}
+.video-embed iframe,
+.video-embed video,
+.video-embed-youtube iframe,
+[data-youtube-video] iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+[data-youtube-video] {
+  aspect-ratio: 16 / 9;
+}
+[data-youtube-video] iframe {
+  position: absolute;
+}
+
+/* Inline videos posted as plain <video> tag (e.g. mp4 link) */
+.prose video,
+.rich-editor-content video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  display: block;
+  margin: 1rem auto;
+}
+
+/* Mobile: tighten paddings & wrap toolbars */
+@media (max-width: 640px) {
+  .rich-editor-content {
+    padding: 0.75rem !important;
+  }
+  .prose {
+    font-size: 0.95rem;
+  }
+}
