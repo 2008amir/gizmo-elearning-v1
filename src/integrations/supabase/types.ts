@@ -14,16 +14,221 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      courses: {
+        Row: {
+          certificate_enabled: boolean
+          created_at: string
+          description: string
+          duration_minutes: number
+          featured: boolean
+          id: string
+          image_url: string | null
+          instructor_id: string | null
+          learn_points: Json
+          level: string
+          overview: string | null
+          price: number
+          purchase_enabled: boolean
+          rating_avg: number
+          rating_count: number
+          title: string
+          total_lessons: number
+          updated_at: string
+        }
+        Insert: {
+          certificate_enabled?: boolean
+          created_at?: string
+          description?: string
+          duration_minutes?: number
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          instructor_id?: string | null
+          learn_points?: Json
+          level?: string
+          overview?: string | null
+          price?: number
+          purchase_enabled?: boolean
+          rating_avg?: number
+          rating_count?: number
+          title: string
+          total_lessons?: number
+          updated_at?: string
+        }
+        Update: {
+          certificate_enabled?: boolean
+          created_at?: string
+          description?: string
+          duration_minutes?: number
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          instructor_id?: string | null
+          learn_points?: Json
+          level?: string
+          overview?: string | null
+          price?: number
+          purchase_enabled?: boolean
+          rating_avg?: number
+          rating_count?: number
+          title?: string
+          total_lessons?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string | null
+          created_at: string
+          file_name: string | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          read_at: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          file_name?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          read_at?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          file_name?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          read_at?: string | null
+          recipient_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
+      password_reset_otps: {
+        Row: {
+          attempts: number
+          created_at: string
+          email: string
+          expires_at: string
+          otp_code: string
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          email: string
+          expires_at: string
+          otp_code: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          email?: string
+          expires_at?: string
+          otp_code?: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      pending_signups: {
+        Row: {
+          attempts: number
+          country: string
+          created_at: string
+          email: string
+          expires_at: string
+          first_name: string
+          id: string
+          last_name: string
+          otp_code: string
+          password: string
+          username: string
+        }
+        Insert: {
+          attempts?: number
+          country?: string
+          created_at?: string
+          email: string
+          expires_at: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          otp_code: string
+          password: string
+          username: string
+        }
+        Update: {
+          attempts?: number
+          country?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          otp_code?: string
+          password?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      saved_research: {
+        Row: {
+          created_at: string
+          id: string
+          research_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          research_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          research_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      __setup_apply_sql: { Args: { _sql: string }; Returns: undefined }
+      gen_invite_code: { Args: never; Returns: string }
+      get_active_history: { Args: { period: string }; Returns: Json }
+      get_admin_stats: { Args: never; Returns: Json }
+      get_public_certificate: {
+        Args: { _serial: string; _username: string }
+        Returns: Json
+      }
+      get_user_detail: { Args: { _user_id: string }; Returns: Json }
+      record_my_activity: { Args: never; Returns: undefined }
+      submit_exam: {
+        Args: { _answers: Json; _course_id: string; _question_ids: string[] }
+        Returns: Json
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      research_category: "drugs" | "disease" | "discovery"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +355,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      research_category: ["drugs", "disease", "discovery"],
+    },
   },
 } as const
