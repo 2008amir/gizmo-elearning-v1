@@ -10,7 +10,19 @@ const json = (body: unknown, status = 200) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
-export async function verifyTurnstile(token: unknown, remoteIp?: string | null): Promise<boolean> {
+const PROD_HOST_SUFFIX = "codebreakers.uk";
+
+function isProdOrigin(origin?: string | null): boolean {
+  if (!origin) return false;
+  try {
+    const host = new URL(origin).hostname.toLowerCase();
+    return host === PROD_HOST_SUFFIX || host.endsWith(`.${PROD_HOST_SUFFIX}`);
+  } catch {
+    return false;
+  }
+}
+
+export async function verifyTurnstile(token: unknown, remoteIp?: string | null, origin?: string | null): Promise<boolean> {
   if (typeof token !== "string" || !token) return false;
   const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
   if (!secret) return false;
