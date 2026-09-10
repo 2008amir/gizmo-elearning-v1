@@ -111,7 +111,7 @@ function CourseDetail() {
   const { data: progressRows = [] } = useQuery({
     queryKey: ["progress-course", user?.id, course?.title],
     enabled: !!user && !!course,
-    queryFn: async () => (await supabase.from("research_progress").select("research_id, created_at").eq("user_id", user!.id).eq("research_type", course!.title)).data as { research_id: string; created_at: string }[] ?? [],
+    queryFn: async () => ((await supabase.from("research_progress").select("research_id, completed_at").eq("user_id", user!.id).eq("research_type", course!.title)).data ?? []).map((p) => ({ research_id: p.research_id, created_at: p.completed_at })) as { research_id: string; created_at: string }[],
   });
 
   const completedIds = useMemo(() => new Set(progressRows.map((p) => p.research_id)), [progressRows]);
