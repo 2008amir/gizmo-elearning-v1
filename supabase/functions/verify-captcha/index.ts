@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
   try {
     const { token } = await req.json();
     const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
-    const ok = await verifyTurnstile(token, ip);
+    const ok = await verifyTurnstile(token, ip, req.headers.get("origin") || req.headers.get("referer"));
     if (!ok) return json({ error: "captcha failed" }, 400);
     return json({ ok: true });
   } catch {
