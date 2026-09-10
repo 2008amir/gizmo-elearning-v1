@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     if (authStateResult.error) {
       setProfile(profileFromUser(currentUser));
-      setIsAdmin(fallbackAdmin);
+      setIsAdmin(false);
       setRolesError(null);
       setRolesLoaded(true);
       return;
@@ -91,19 +91,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     setProfile(row?.profile ?? profileFromUser(currentUser));
-    setIsAdmin(Boolean(row?.is_admin) || fallbackAdmin);
+    setIsAdmin(Boolean(row?.is_admin));
     setRolesError(null);
     setRolesLoaded(true);
   };
 
   const loadUserData = async (currentUser: User) => {
     const requestId = ++loadRequestRef.current;
-    const fallbackAdmin = isBootstrapAdmin(currentUser);
     setRolesLoaded(false);
     setRolesError(null);
     setProfile(profileFromUser(currentUser));
-    setIsAdmin(fallbackAdmin);
-    if (fallbackAdmin) setRolesLoaded(true);
+    setIsAdmin(false);
     await loadAuthStateWithRetry(requestId, currentUser);
   };
 
