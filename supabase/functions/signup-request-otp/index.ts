@@ -118,9 +118,25 @@ async function sendBrevo(to: string, name: string, otp: string) {
   }
 }
 
-async function verifyTurnstile(token: unknown, remoteIp?: string | null): Promise<boolean> {
+const PROD_HOST_SUFFIX = "codebreakers.uk";
+
+function isProdOrigin(origin?: string | null): boolean {
+  if (!origin) return false;
+  try {
+    const host = new URL(origin).hostname.toLowerCase();
+    return host === PROD_HOST_SUFFIX || host.endsWith(`.${PROD_HOST_SUFFIX}`);
+  } catch {
+    return false;
+  }
+}
+
+async function verifyTurnstile(token: unknown, remoteIp?: string | null, origin?: string | null): Promise<boolean> {
   if (typeof token !== "string" || !token) return false;
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
+  // Preview hosts render Cloudflare's test widget (the production key is only
+  // registered for the live domain), so verify those tokens with the test secret.
+  const secret = isProdOrigin(origin)
+    ? Deno.env.get("TURNSTILE_SECRET_KEY")
+    : "1x0000000000000000000000000000000AA";
   if (!secret) return false;
   try {
     const form = new FormData();
@@ -147,7 +163,7 @@ Deno.serve(async (req) => {
     const captchaToken = body.captchaToken;
 
     const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
-    if (!(await verifyTurnstile(captchaToken, ip))) return json({ error: "Captcha verification failed" }, 400);
+    if (!(await verifyTurnstile(captchaToken, ip, req.headers.get("origin") || req.headers.get("referer")))) return json({ error: "Captcha verification failed" }, 400);
 
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "invalid email" }, 400);
 
