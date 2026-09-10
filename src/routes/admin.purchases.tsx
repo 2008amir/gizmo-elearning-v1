@@ -115,13 +115,13 @@ function AdminPurchases() {
                       <img src={r.receipt_url} alt="receipt" className="max-h-72 mx-auto rounded-md object-contain glass" />
                     </a>
                     <div className="grid grid-cols-3 gap-2">
-                      <Button className="bg-emerald-600 hover:bg-emerald-500 text-white" onClick={() => act(r.id, "approved")} disabled={!!busy}>
+                      <Button variant="success" onClick={() => act(r.id, "approved")} disabled={!!busy}>
                         {busy === r.id + "approved" ? <Loader2 className="h-4 w-4 animate-spin" /> : <><CheckCircle2 className="h-4 w-4 mr-1" /> Received</>}
                       </Button>
-                      <Button className="bg-amber-500 hover:bg-amber-400 text-black" onClick={() => act(r.id, "rejected")} disabled={!!busy}>
+                      <Button variant="accent" onClick={() => act(r.id, "rejected")} disabled={!!busy}>
                         {busy === r.id + "rejected" ? <Loader2 className="h-4 w-4 animate-spin" /> : <><XCircle className="h-4 w-4 mr-1" /> Not received</>}
                       </Button>
-                      <Button className="bg-red-600 hover:bg-red-500 text-white" onClick={() => act(r.id, "scam")} disabled={!!busy}>
+                      <Button variant="destructive" onClick={() => act(r.id, "scam")} disabled={!!busy}>
                         {busy === r.id + "scam" ? <Loader2 className="h-4 w-4 animate-spin" /> : <><ShieldAlert className="h-4 w-4 mr-1" /> Scam</>}
                       </Button>
                     </div>
