@@ -66,7 +66,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const initializedRef = useRef(false);
 
   const loadAuthStateWithRetry = async (requestId: number, currentUser: User, attempt = 0): Promise<void> => {
-    const fallbackAdmin = isBootstrapAdmin(currentUser);
     const authStateResult = await loadAuthStateRequest();
 
     if (loadRequestRef.current !== requestId) return;
