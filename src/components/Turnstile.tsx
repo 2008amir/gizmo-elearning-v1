@@ -1,16 +1,12 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
-// Production site key is registered for the live domain only. On any other host
-// (Lovable preview/published sandboxes, localhost) Cloudflare rejects it with
-// error 110200, so fall back to Cloudflare's always-passing test key there.
-const PROD_SITE_KEY = "0x4AAAAAAD0YZS447RNAlkze";
-const TEST_SITE_KEY = "1x00000000000000000000AA";
-const PROD_HOST_SUFFIX = "codebreakers.uk";
+// Public Turnstile site key. Overridable per environment via
+// VITE_TURNSTILE_SITE_KEY (e.g. a dev widget key); defaults to the production
+// widget. Never place the secret key in client code.
+const DEFAULT_SITE_KEY = "0x4AAAAAAD0YZS447RNAlkze";
 
 function resolveSiteKey(): string {
-  if (typeof window === "undefined") return PROD_SITE_KEY;
-  const host = window.location.hostname.toLowerCase();
-  return host === PROD_HOST_SUFFIX || host.endsWith(`.${PROD_HOST_SUFFIX}`) ? PROD_SITE_KEY : TEST_SITE_KEY;
+  return (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined)?.trim() || DEFAULT_SITE_KEY;
 }
 
 const SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js";
