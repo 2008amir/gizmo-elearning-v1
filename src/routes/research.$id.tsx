@@ -85,6 +85,14 @@ function formatCommentDate(iso: string) {
 
 export const Route = createFileRoute("/research/$id")({
   component: () => <RequireAuth><ResearchDetail /></RequireAuth>,
+  head: () => ({
+    meta: [
+      { title: "Research — Gizmo Office Plus" },
+      { name: "description", content: "Read the full research write-up, comments and discussion on Gizmo Office Plus." },
+      { property: "og:title", content: "Research — Gizmo Office Plus" },
+      { property: "og:description", content: "Read the full research write-up, comments and discussion on Gizmo Office Plus." },
+    ],
+  }),
 });
 
 function extractPageStyles(contentHtml: string | null | undefined) {

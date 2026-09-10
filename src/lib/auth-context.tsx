@@ -27,15 +27,6 @@ type AuthContextValue = {
 };
 
 const ROLE_RETRY_DELAYS = [120, 280];
-const ADMIN_BOOTSTRAP_USER_ID = "6e0915e6-c64e-482d-883e-0112ee39b560";
-const ADMIN_BOOTSTRAP_EMAIL = "ecomedicsquad@gmail.com";
-
-function isBootstrapAdmin(user: User | null) {
-  return Boolean(
-    user &&
-      (user.id === ADMIN_BOOTSTRAP_USER_ID || user.email?.toLowerCase() === ADMIN_BOOTSTRAP_EMAIL)
-  );
-}
 
 function profileFromUser(user: User): Profile {
   const meta = user.user_metadata ?? {};
