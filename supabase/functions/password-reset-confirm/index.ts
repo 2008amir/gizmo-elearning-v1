@@ -1,0 +1,40 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const json = (b: unknown, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  try {
+    const body = await req.json();
+    const email = String(body.email || "").trim().toLowerCase();
+    const code = String(body.code || "").trim();
+    const password = String(body.password || "");
+    if (!/^\d{6}$/.test(code)) return json({ error: "Invalid code" }, 200);
+    if (password.length < 8) return json({ error: "Password must be at least 8 characters" }, 200);
+
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const { data: rec } = await admin.from("password_reset_otps").select("*").eq("email", email).maybeSingle();
+    if (!rec || !rec.verified || rec.otp_code !== code) return json({ error: "Verification required" }, 200);
+    if (new Date(rec.expires_at).getTime() < Date.now()) {
+      await admin.from("password_reset_otps").delete().eq("email", email);
+      return json({ error: "Code expired" }, 200);
+    }
+
+    const { data: usersList } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const user = usersList?.users?.find((u) => (u.email || "").toLowerCase() === email);
+    if (!user) return json({ error: "User not found" }, 200);
+
+    const { error: updErr } = await admin.auth.admin.updateUserById(user.id, { password });
+    if (updErr) return json({ error: updErr.message }, 200);
+
+    await admin.from("password_reset_otps").delete().eq("email", email);
+    return json({ ok: true });
+  } catch (e) {
+    return json({ error: e instanceof Error ? e.message : "failed" }, 200);
+  }
+});
