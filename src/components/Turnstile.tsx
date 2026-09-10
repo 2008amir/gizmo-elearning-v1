@@ -91,7 +91,7 @@ export const Turnstile = forwardRef<TurnstileHandle, {
       .then(() => {
         if (cancelled || !containerRef.current || !window.turnstile) return;
         widgetIdRef.current = window.turnstile.render(containerRef.current, {
-          sitekey: SITE_KEY,
+          sitekey: resolveSiteKey(),
           theme,
           callback: (token) => onTokenRef.current(token),
           "error-callback": () => {
