@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { createFileRoute, useNavigate, useSearch, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { Loader2, Mail } from "lucide-react";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/Logo";
+import { Turnstile, type TurnstileHandle } from "@/components/Turnstile";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -28,6 +29,8 @@ function VerifyEmailPage() {
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<TurnstileHandle | null>(null);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -62,12 +65,22 @@ function VerifyEmailPage() {
 
   const resend = async () => {
     if (!email) { toast.error("Missing email. Please sign up again."); return; }
+    if (!captchaToken) { toast.error("Please complete the verification check below."); return; }
     setResending(true);
     try {
-      // Re-triggering the request requires the password, which we don't have here.
-      // Ask the user to sign up again to receive a fresh code.
-      toast.info("To get a new code, please return to sign up and submit again.");
+      const { data, error } = await supabase.functions.invoke("signup-request-otp", {
+        body: { email, resend: true, captchaToken },
+      });
+      if (error || !data || data.error) {
+        toast.error((data && data.error) || error?.message || "Could not send a new code");
+        return;
+      }
+      setCode("");
+      toast.success("We sent a new code to your email.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send a new code");
     } finally {
+      captchaRef.current?.reset();
       setResending(false);
     }
   };
@@ -108,9 +121,18 @@ function VerifyEmailPage() {
               Verify & create account
             </Button>
           </form>
-          <div className="mt-5 flex items-center justify-between text-sm">
-            <button type="button" onClick={resend} disabled={resending} className="text-muted-foreground hover:text-foreground">
-              Didn't get the code?
+          <div className="mt-5">
+            <Turnstile ref={captchaRef} onToken={setCaptchaToken} />
+          </div>
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <button
+              type="button"
+              onClick={resend}
+              disabled={resending || !captchaToken}
+              className="inline-flex items-center text-muted-foreground hover:text-foreground disabled:opacity-60"
+            >
+              {resending && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
+              Send a new code
             </button>
             <Link to="/" className="text-muted-foreground hover:text-foreground">Back to sign in</Link>
           </div>

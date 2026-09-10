@@ -27,15 +27,6 @@ type AuthContextValue = {
 };
 
 const ROLE_RETRY_DELAYS = [120, 280];
-const ADMIN_BOOTSTRAP_USER_ID = "6e0915e6-c64e-482d-883e-0112ee39b560";
-const ADMIN_BOOTSTRAP_EMAIL = "ecomedicsquad@gmail.com";
-
-function isBootstrapAdmin(user: User | null) {
-  return Boolean(
-    user &&
-      (user.id === ADMIN_BOOTSTRAP_USER_ID || user.email?.toLowerCase() === ADMIN_BOOTSTRAP_EMAIL)
-  );
-}
 
 function profileFromUser(user: User): Profile {
   const meta = user.user_metadata ?? {};
@@ -75,7 +66,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const initializedRef = useRef(false);
 
   const loadAuthStateWithRetry = async (requestId: number, currentUser: User, attempt = 0): Promise<void> => {
-    const fallbackAdmin = isBootstrapAdmin(currentUser);
     const authStateResult = await loadAuthStateRequest();
 
     if (loadRequestRef.current !== requestId) return;
@@ -85,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     if (authStateResult.error) {
       setProfile(profileFromUser(currentUser));
-      setIsAdmin(fallbackAdmin);
+      setIsAdmin(false);
       setRolesError(null);
       setRolesLoaded(true);
       return;
@@ -101,19 +91,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     setProfile(row?.profile ?? profileFromUser(currentUser));
-    setIsAdmin(Boolean(row?.is_admin) || fallbackAdmin);
+    setIsAdmin(Boolean(row?.is_admin));
     setRolesError(null);
     setRolesLoaded(true);
   };
 
   const loadUserData = async (currentUser: User) => {
     const requestId = ++loadRequestRef.current;
-    const fallbackAdmin = isBootstrapAdmin(currentUser);
     setRolesLoaded(false);
     setRolesError(null);
     setProfile(profileFromUser(currentUser));
-    setIsAdmin(fallbackAdmin);
-    if (fallbackAdmin) setRolesLoaded(true);
+    setIsAdmin(false);
     await loadAuthStateWithRetry(requestId, currentUser);
   };
 
