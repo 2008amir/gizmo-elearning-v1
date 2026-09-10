@@ -121,9 +121,18 @@ function VerifyEmailPage() {
               Verify & create account
             </Button>
           </form>
-          <div className="mt-5 flex items-center justify-between text-sm">
-            <button type="button" onClick={resend} disabled={resending} className="text-muted-foreground hover:text-foreground">
-              Didn't get the code?
+          <div className="mt-5">
+            <Turnstile ref={captchaRef} onToken={setCaptchaToken} />
+          </div>
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <button
+              type="button"
+              onClick={resend}
+              disabled={resending || !captchaToken}
+              className="inline-flex items-center text-muted-foreground hover:text-foreground disabled:opacity-60"
+            >
+              {resending && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
+              Send a new code
             </button>
             <Link to="/" className="text-muted-foreground hover:text-foreground">Back to sign in</Link>
           </div>
