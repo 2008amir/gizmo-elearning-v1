@@ -24,7 +24,12 @@ function isProdOrigin(origin?: string | null): boolean {
 
 export async function verifyTurnstile(token: unknown, remoteIp?: string | null, origin?: string | null): Promise<boolean> {
   if (typeof token !== "string" || !token) return false;
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
+  // The production site key is only registered for the live domain, so preview
+  // hosts render Cloudflare's test widget; those tokens validate against the
+  // matching test secret only.
+  const secret = isProdOrigin(origin)
+    ? Deno.env.get("TURNSTILE_SECRET_KEY")
+    : "1x0000000000000000000000000000000AA";
   if (!secret) return false;
   try {
     const form = new FormData();
