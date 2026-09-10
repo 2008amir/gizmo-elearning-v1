@@ -361,7 +361,7 @@ function ResearchDetail() {
                   <div className="flex items-start gap-3">
                     <Avatar className={cn("ring-1 ring-gray-200 shrink-0", isReply ? "h-8 w-8" : "h-10 w-10")}>
                       <AvatarImage src={c.profiles?.avatar_url || undefined} />
-                      <AvatarFallback className="bg-blue-600 text-white text-xs font-bold">{initials}</AvatarFallback>
+                      <AvatarFallback className="gradient-bg text-primary-foreground text-xs font-bold">{initials}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold text-foreground truncate">{fullName}</div>

@@ -21,7 +21,7 @@ export function TopBar({ search, onSearchChange, homeTo, profileTo, placeholder 
   const initials = ((profile?.first_name?.[0] ?? "") + (profile?.last_name?.[0] ?? "")).toUpperCase() || (user?.email?.[0]?.toUpperCase() ?? "U");
 
   return (
-    <header className="sticky top-0 z-30 bg-background border-b border-border">
+    <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
       <div className="container mx-auto px-4 py-3 flex flex-col gap-3">
         {/* Row 1: logo + profile */}
         <div className="flex items-center justify-between">
@@ -30,7 +30,7 @@ export function TopBar({ search, onSearchChange, homeTo, profileTo, placeholder 
             <NotificationBell />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="rounded-full ring-2 ring-border hover:ring-primary transition">
+              <button className="rounded-full ring-2 ring-border transition-all duration-200 hover:ring-primary focus-visible:outline-none focus-visible:ring-primary">
                 <Avatar className="h-9 w-9">
                   <AvatarImage src={profile?.avatar_url ?? undefined} />
                   <AvatarFallback className="gradient-bg text-primary-foreground text-xs font-bold">{initials}</AvatarFallback>
@@ -64,7 +64,7 @@ export function TopBar({ search, onSearchChange, homeTo, profileTo, placeholder 
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={placeholder ?? "Search..."}
-            className="pl-9 glass"
+            className="pl-9 bg-secondary/60 border-border"
           />
         </div>
       </div>

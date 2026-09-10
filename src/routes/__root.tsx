@@ -50,7 +50,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { rel: "apple-touch-icon", href: "https://plain-weur-prod-public.komododecks.com/202604/27/xyjki78OX6s1cXUslODP/image.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" },
       { rel: "preconnect", href: "https://challenges.cloudflare.com" },
       { rel: "preload", as: "script", href: "https://challenges.cloudflare.com/turnstile/v0/api.js" },
     ],
