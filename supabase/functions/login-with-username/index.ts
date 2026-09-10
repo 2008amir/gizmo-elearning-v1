@@ -6,25 +6,10 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const PROD_HOST_SUFFIX = "codebreakers.uk";
-
-function isProdOrigin(origin?: string | null): boolean {
-  if (!origin) return false;
-  try {
-    const host = new URL(origin).hostname.toLowerCase();
-    return host === PROD_HOST_SUFFIX || host.endsWith(`.${PROD_HOST_SUFFIX}`);
-  } catch {
-    return false;
-  }
-}
-
-async function verifyTurnstile(token: unknown, remoteIp?: string | null, origin?: string | null): Promise<boolean> {
+async function verifyTurnstile(token: unknown, remoteIp?: string | null): Promise<boolean> {
   if (typeof token !== "string" || !token) return false;
-  // Preview hosts render Cloudflare's test widget (the production key is only
-  // registered for the live domain), so verify those tokens with the test secret.
-  const secret = isProdOrigin(origin)
-    ? Deno.env.get("TURNSTILE_SECRET_KEY")
-    : "1x0000000000000000000000000000000AA";
+  // Server-only secret; all environments validate against Cloudflare siteverify.
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
   if (!secret) return false;
   try {
     const form = new FormData();
@@ -48,8 +33,8 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "invalid credentials" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
-    if (!(await verifyTurnstile(captchaToken, ip, req.headers.get("origin") || req.headers.get("referer")))) {
-      return new Response(JSON.stringify({ error: "captcha failed" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (!(await verifyTurnstile(captchaToken, ip))) {
+      return new Response(JSON.stringify({ error: "Please complete the security verification and try again." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const url = Deno.env.get("SUPABASE_URL")!;
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;

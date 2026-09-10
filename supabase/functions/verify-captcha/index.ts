@@ -10,26 +10,11 @@ const json = (body: unknown, status = 200) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
-const PROD_HOST_SUFFIX = "codebreakers.uk";
-
-function isProdOrigin(origin?: string | null): boolean {
-  if (!origin) return false;
-  try {
-    const host = new URL(origin).hostname.toLowerCase();
-    return host === PROD_HOST_SUFFIX || host.endsWith(`.${PROD_HOST_SUFFIX}`);
-  } catch {
-    return false;
-  }
-}
-
-export async function verifyTurnstile(token: unknown, remoteIp?: string | null, origin?: string | null): Promise<boolean> {
+export async function verifyTurnstile(token: unknown, remoteIp?: string | null): Promise<boolean> {
   if (typeof token !== "string" || !token) return false;
-  // The production site key is only registered for the live domain, so preview
-  // hosts render Cloudflare's test widget; those tokens validate against the
-  // matching test secret only.
-  const secret = isProdOrigin(origin)
-    ? Deno.env.get("TURNSTILE_SECRET_KEY")
-    : "1x0000000000000000000000000000000AA";
+  // Server-only secret; every environment validates against the real Cloudflare
+  // siteverify endpoint. No test/bypass path.
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
   if (!secret) return false;
   try {
     const form = new FormData();
@@ -53,8 +38,8 @@ Deno.serve(async (req) => {
   try {
     const { token } = await req.json();
     const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
-    const ok = await verifyTurnstile(token, ip, req.headers.get("origin") || req.headers.get("referer"));
-    if (!ok) return json({ error: "captcha failed" }, 400);
+    const ok = await verifyTurnstile(token, ip);
+    if (!ok) return json({ error: "Please complete the security verification and try again." }, 400);
     return json({ ok: true });
   } catch {
     return json({ error: "captcha failed" }, 400);
