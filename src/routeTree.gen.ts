@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MarketRouteImport } from './routes/market'
@@ -64,11 +63,6 @@ import { Route as AdminExamsCourseIdRouteImport } from './routes/admin.exams.$co
 import { Route as AdminActivePeriodRouteImport } from './routes/admin.active.$period'
 import { Route as AdminResearchEditIdRouteImport } from './routes/admin.research.edit.$id'
 
-const VerifyEmailRoute = VerifyEmailRouteImport.update({
-  id: '/verify-email',
-  path: '/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SavedRoute = SavedRouteImport.update({
   id: '/saved',
   path: '/saved',
@@ -349,7 +343,6 @@ export interface FileRoutesByFullPath {
   '/market': typeof MarketRoute
   '/profile': typeof ProfileRoute
   '/saved': typeof SavedRoute
-  '/verify-email': typeof VerifyEmailRoute
   '/account/security': typeof AccountSecurityRoute
   '/account/settings': typeof AccountSettingsRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
@@ -405,7 +398,6 @@ export interface FileRoutesByTo {
   '/market': typeof MarketRoute
   '/profile': typeof ProfileRoute
   '/saved': typeof SavedRoute
-  '/verify-email': typeof VerifyEmailRoute
   '/account/security': typeof AccountSecurityRoute
   '/account/settings': typeof AccountSettingsRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
@@ -462,7 +454,6 @@ export interface FileRoutesById {
   '/market': typeof MarketRoute
   '/profile': typeof ProfileRoute
   '/saved': typeof SavedRoute
-  '/verify-email': typeof VerifyEmailRoute
   '/account/security': typeof AccountSecurityRoute
   '/account/settings': typeof AccountSettingsRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
@@ -520,7 +511,6 @@ export interface FileRouteTypes {
     | '/market'
     | '/profile'
     | '/saved'
-    | '/verify-email'
     | '/account/security'
     | '/account/settings'
     | '/admin/assignments'
@@ -576,7 +566,6 @@ export interface FileRouteTypes {
     | '/market'
     | '/profile'
     | '/saved'
-    | '/verify-email'
     | '/account/security'
     | '/account/settings'
     | '/admin/assignments'
@@ -632,7 +621,6 @@ export interface FileRouteTypes {
     | '/market'
     | '/profile'
     | '/saved'
-    | '/verify-email'
     | '/account/security'
     | '/account/settings'
     | '/admin/assignments'
@@ -689,7 +677,6 @@ export interface RootRouteChildren {
   MarketRoute: typeof MarketRoute
   ProfileRoute: typeof ProfileRoute
   SavedRoute: typeof SavedRoute
-  VerifyEmailRoute: typeof VerifyEmailRoute
   AccountSecurityRoute: typeof AccountSecurityRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AssignmentsIdRoute: typeof AssignmentsIdRoute
@@ -716,13 +703,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/verify-email': {
-      id: '/verify-email'
-      path: '/verify-email'
-      fullPath: '/verify-email'
-      preLoaderRoute: typeof VerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/saved': {
       id: '/saved'
       path: '/saved'
@@ -1186,7 +1166,6 @@ const rootRouteChildren: RootRouteChildren = {
   MarketRoute: MarketRoute,
   ProfileRoute: ProfileRoute,
   SavedRoute: SavedRoute,
-  VerifyEmailRoute: VerifyEmailRoute,
   AccountSecurityRoute: AccountSecurityRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AssignmentsIdRoute: AssignmentsIdRoute,
