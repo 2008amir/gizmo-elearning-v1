@@ -10,11 +10,11 @@ export function Logo({ to = "/" }: { to?: string }) {
       <img
         src={logoSrc}
         alt="Gizmo Office Plus logo"
-        className="h-10 w-10 shrink-0 rounded-sm object-cover shadow-elegant transition-transform group-hover:scale-105"
+        className="h-10 w-10 shrink-0 rounded-sm border-[3px] border-white object-cover shadow-elegant transition-transform group-hover:scale-105"
       />
-      <div className="min-w-0 leading-tight">
-        <div className="truncate text-base font-bold text-sidebar-foreground">Gizmo Dan Kaita</div>
-        <div className="-mt-0.5 text-[10px] uppercase tracking-widest text-sidebar-foreground/75">//CODEBREAKERS</div>
+      <div className="min-w-0 leading-tight text-shadow-md">
+        <div className="truncate text-base font-bold text-white">Gizmo Dan Kaita</div>
+        <div className="-mt-0.5 text-[10px] uppercase tracking-widest text-white/90">//CODEBREAKERS</div>
       </div>
     </Link>
   );
