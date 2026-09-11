@@ -70,8 +70,8 @@ export function AuthScreen() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="container mx-auto px-4 py-6">
-        <Logo />
+      <header className="gizmo-header-bg border-b border-border">
+        <div className="container mx-auto px-4 py-4"><Logo /></div>
       </header>
       <main className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-md glass-strong rounded-2xl p-6 md:p-8">
