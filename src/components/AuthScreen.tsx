@@ -281,14 +281,23 @@ function SignUpForm({ onPendingChange: _onPendingChange }: { onPendingChange: (v
           captchaToken,
         },
       });
-      if (error || (data && data.error)) {
-        toast.error((data && data.error) || error?.message || "Could not send verification code");
+      if (error || !data || data.error) {
+        toast.error((data && data.error) || error?.message || "Could not create your account");
         setSubmitting(false);
         return;
       }
-      toast.success("We sent a 6-digit code to your email.");
-      setSubmitting(false);
-      navigate({ to: "/verify-email", search: { email: form.email } });
+      if (data.access_token && data.refresh_token) {
+        await supabase.auth.setSession({
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+        });
+        toast.success("Account created! Welcome aboard 🎉");
+        _onPendingChange(true);
+      } else {
+        toast.success("Account created. Please sign in.");
+        setSubmitting(false);
+      }
+
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Sign up failed");
       setSubmitting(false);
