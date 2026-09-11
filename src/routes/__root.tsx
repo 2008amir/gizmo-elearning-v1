@@ -38,7 +38,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Gizmo Office Plus" },
+      { title: "Gizmo Dan Kaita — Office Plus" },
       { name: "author", content: "Gizmo Office Plus" },
       { name: "application-name", content: "Gizmo Office Plus" },
       { property: "og:type", content: "website" },
@@ -46,8 +46,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "icon", type: "image/png", href: "https://plain-weur-prod-public.komododecks.com/202604/27/xyjki78OX6s1cXUslODP/image.png" },
-      { rel: "apple-touch-icon", href: "https://plain-weur-prod-public.komododecks.com/202604/27/xyjki78OX6s1cXUslODP/image.png" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" },
