@@ -251,7 +251,7 @@
   background-color: var(--sidebar);
   background-image:
     linear-gradient(oklch(14% 0.05 264 / 0.28), oklch(14% 0.05 264 / 0.28)),
-    url("/__l5e/assets-v1/9ff60476-e2b5-443b-8d91-24b884a99ccb/gizmo-blue-network.jpg");
+    url("/gizmo-blue-network.jpg");
   background-position: center;
   background-size: cover;
 }
