@@ -15,12 +15,12 @@ function applyTheme(resolved: "light" | "dark") {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [pref, setPrefState] = useState<ThemePref>("system");
-  const [resolved, setResolved] = useState<"light" | "dark">("dark");
+  const [pref, setPrefState] = useState<ThemePref>("light");
+  const [resolved, setResolved] = useState<"light" | "dark">("light");
 
   useEffect(() => {
     const stored = (typeof localStorage !== "undefined" && localStorage.getItem(STORAGE_KEY)) as ThemePref | null;
-    const initial: ThemePref = stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
+    const initial: ThemePref = stored === "light" || stored === "dark" || stored === "system" ? stored : "light";
     setPrefState(initial);
   }, []);
 
