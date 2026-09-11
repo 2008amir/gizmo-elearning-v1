@@ -207,7 +207,7 @@ function SignInForm({ onPendingChange }: { onPendingChange: (v: boolean) => void
 }
 
 function SignUpForm({ onPendingChange: _onPendingChange }: { onPendingChange: (v: boolean) => void }) {
-  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     firstName: "", lastName: "", username: "", email: "", country: "", password: "", confirmPassword: "",
   });
