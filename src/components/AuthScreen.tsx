@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 
 import { Logo } from "@/components/Logo";
 import { CountrySelect } from "@/components/CountrySelect";
-import { PasswordInput, isStrongPassword } from "@/components/PasswordInput";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Turnstile, type TurnstileHandle } from "@/components/Turnstile";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -25,7 +25,7 @@ const signUpSchema = z.object({
   username: z.string().trim().min(3, "Min 3 chars").max(30).regex(/^[a-zA-Z0-9_]+$/, "Letters, numbers, _ only"),
   email: z.string().trim().email("Invalid email").max(255),
   country: z.string().min(1, "Select a country"),
-  password: z.string().refine(isStrongPassword, { message: "Password doesn't meet all requirements" }),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
 }).refine((d) => d.password === d.confirmPassword, { message: "Passwords don't match", path: ["confirmPassword"] });
 
@@ -351,7 +351,8 @@ function SignUpForm({ onPendingChange: _onPendingChange }: { onPendingChange: (v
       <div className="grid grid-cols-1 gap-3">
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <PasswordInput id="password" value={form.password} onChange={set("password")} className="glass" showStrength />
+          <PasswordInput id="password" value={form.password} onChange={set("password")} className="glass" />
+          {!errors.password && <p className="text-xs text-muted-foreground">Use at least 8 characters.</p>}
           {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
         </div>
         <div className="space-y-2">

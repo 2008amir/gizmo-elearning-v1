@@ -95,11 +95,11 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
-        <Link to="/dashboard" className="flex items-center gap-2 px-2 py-2">
-          <img src={logoSrc} alt="Gizmo Office Plus" className="h-8 w-8 rounded-full object-cover shrink-0 glow" />
+        <Link to="/dashboard" className="flex items-center gap-2 rounded-md bg-sidebar-primary/15 px-2 py-2 ring-1 ring-sidebar-primary/25 transition-colors hover:bg-sidebar-primary/20">
+          <img src={logoSrc} alt="Gizmo Dan Kaita Office Plus" className="h-8 w-8 shrink-0 rounded-sm object-cover glow" />
           {!collapsed && (
             <div className="leading-tight min-w-0">
-              <div className="font-bold text-sm gradient-text truncate">Gizmo Office Plus</div>
+              <div className="truncate text-sm font-bold text-sidebar-foreground">Gizmo Dan Kaita</div>
               <div className="text-[9px] uppercase tracking-widest text-muted-foreground">//CODEBREAKERS</div>
             </div>
           )}
