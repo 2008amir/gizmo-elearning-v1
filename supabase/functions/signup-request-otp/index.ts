@@ -150,44 +150,14 @@ Deno.serve(async (req) => {
     const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
     if (!(await verifyTurnstile(captchaToken, ip))) return json({ error: "Please complete the security verification and try again." }, 400);
 
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "invalid email" }, 400);
-
-    // Resend path: reuse the pending signup already stored for this email so the
-    // user does not have to re-enter their password to get a fresh code.
-    if (body.resend === true) {
-      const adminResend = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-      );
-      const { data: pending } = await adminResend
-        .from("pending_signups")
-        .select("email, first_name")
-        .eq("email", email)
-        .maybeSingle();
-      if (!pending) return json({ error: "No pending signup found for this email. Please sign up again." }, 400);
-
-      const newOtp = String(Math.floor(100000 + Math.random() * 900000));
-      const { error: resendErr } = await adminResend
-        .from("pending_signups")
-        .update({
-          otp_code: newOtp,
-          attempts: 0,
-          expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
-        })
-        .eq("email", email);
-      if (resendErr) return json({ error: resendErr.message }, 200);
-
-      await sendBrevo(email, String(pending.first_name || ""), newOtp);
-      return json({ ok: true });
-    }
-
-    if (password.length < 8) return json({ error: "invalid password" }, 400);
-    if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) return json({ error: "invalid username" }, 400);
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "Invalid email" }, 400);
+    if (password.length < 8) return json({ error: "Password must be at least 8 characters" }, 400);
+    if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) return json({ error: "Invalid username" }, 400);
 
     const url = Deno.env.get("SUPABASE_URL")!;
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
     const admin = createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
-    // Make sure the email isn't already registered
     const { data: existingProfile } = await admin
       .from("profiles")
       .select("id")
@@ -200,31 +170,28 @@ Deno.serve(async (req) => {
       return json({ error: "An account with this email already exists" }, 400);
     }
 
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    const expires = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    // No email confirmation for signup: create the account immediately.
+    const { data: created, error: createErr } = await admin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { first_name: firstName, last_name: lastName, username, country },
+    });
+    if (createErr || !created?.user) {
+      return json({ error: createErr?.message || "Could not create account" }, 400);
+    }
 
-    // Upsert on email
-    const { error: upErr } = await admin
-      .from("pending_signups")
-      .upsert(
-        {
-          email,
-          password,
-          first_name: firstName,
-          last_name: lastName,
-          username,
-          country,
-          otp_code: otp,
-          attempts: 0,
-          expires_at: expires,
-        },
-        { onConflict: "email" },
-      );
-    if (upErr) return json({ error: upErr.message }, 200);
+    const anon = createClient(url, anonKey);
+    const { data: sess } = await anon.auth.signInWithPassword({ email, password });
+    if (!sess?.session) return json({ ok: true, sign_in_failed: true });
 
-    await sendBrevo(email, firstName, otp);
-    return json({ ok: true });
+    return json({
+      ok: true,
+      access_token: sess.session.access_token,
+      refresh_token: sess.session.refresh_token,
+    });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "failed" }, 200);
   }
 });
+
