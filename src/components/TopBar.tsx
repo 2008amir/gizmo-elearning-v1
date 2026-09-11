@@ -21,7 +21,7 @@ export function TopBar({ search, onSearchChange, homeTo, profileTo, placeholder 
   const initials = ((profile?.first_name?.[0] ?? "") + (profile?.last_name?.[0] ?? "")).toUpperCase() || (user?.email?.[0]?.toUpperCase() ?? "U");
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
+    <header className="gizmo-header-bg sticky top-0 z-30 border-b border-border text-sidebar-foreground">
       <div className="container mx-auto px-4 py-3 flex flex-col gap-3">
         {/* Row 1: logo + profile */}
         <div className="flex items-center justify-between">

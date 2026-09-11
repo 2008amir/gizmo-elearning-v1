@@ -31,7 +31,7 @@ export function AppShell({ children, title, search, onSearchChange, searchPlaceh
     return (
       <RequireAuth>
         <div className="min-h-screen bg-background">
-          <header className="sticky top-0 z-30 h-14 border-b border-border bg-background/95 backdrop-blur flex items-center gap-2 px-3 md:px-4">
+          <header className="gizmo-header-bg sticky top-0 z-30 h-14 border-b border-border flex items-center gap-2 px-3 md:px-4 text-sidebar-foreground">
             <button
               onClick={() => (onBack ? onBack() : navigate({ to: "/dashboard" }))}
               className="inline-flex items-center gap-1 text-sm font-medium hover:text-primary transition"
@@ -53,7 +53,7 @@ export function AppShell({ children, title, search, onSearchChange, searchPlaceh
         <div className="min-h-screen flex w-full bg-background">
           <AppSidebar />
           <SidebarInset className="flex-1 min-w-0">
-            <header className="sticky top-0 z-30 h-14 border-b border-border bg-background/95 backdrop-blur flex items-center gap-2 px-3 md:px-4">
+            <header className="gizmo-header-bg sticky top-0 z-30 h-14 border-b border-border flex items-center gap-2 px-3 md:px-4 text-sidebar-foreground">
               <SidebarTrigger />
               {title && <h1 className="font-semibold text-sm md:text-base truncate">{title}</h1>}
               <div className="ml-auto flex items-center gap-2 md:gap-3">
